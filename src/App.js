@@ -1,55 +1,80 @@
-// useState is the hook that allows us to manage state in a functional component.
-import React, { useState } from 'react';
+import React, { Component } from 'react';
+import './App.css';
 import Person from './Person/Person';
 
-import './App.css';
-
-const App = (props) => {
-  // useState returns an array with exactly two elements and always two elements
-  const [personsState, setPersonsState] = useState({
+class App extends Component {
+  state = {
     persons: [
-      { name: 'Art', age: 36 },
-      { name: 'Steve', age: 30 },
-      { name: 'Jason', age: 31 },
+      { name: 'Max', age: 28 },
+      { name: 'Manu', age: 29 },
+      { name: 'Stephanie', age: 26 },
     ],
-    // otherState: 'some other value',
-  });
+    otherState: 'some other value',
+  };
 
-  const [otherState, setOtherState] = useState('some other value');
-
-  console.log(personsState, otherState);
-
-  const switchNameHandler = () => {
-    setPersonsState({
+  switchNameHandler = (newName) => {
+    // console.log('Was clicked!');
+    // DON'T DO THIS: this.state.persons[0].name = 'Maximilian';
+    this.setState({
       persons: [
-        { name: 'Pedro', age: 47 },
-        { name: 'Allie', age: 30 },
-        { name: 'Sara', age: 39 },
+        { name: newName, age: 28 },
+        { name: 'Manu', age: 29 },
+        { name: 'Stephanie', age: 27 },
       ],
     });
   };
 
-  return (
-    <div className='App'>
-      <h1>Hey you</h1>
-      {/* Because we're no longer inside of a class anymore, the keyword this (from this.switchNameHandler is no longer necessary) */}
-      <button onClick={switchNameHandler}>Switch Name</button>
-      <Person
-        name={personsState.persons[0].name}
-        age={personsState.persons[0].age}
-      />
-      <Person
-        name={personsState.persons[1].name}
-        age={personsState.persons[1].age}
-      >
-        My hobbies: COD
-      </Person>
-      <Person
-        name={personsState.persons[2].name}
-        age={personsState.persons[2].age}
-      />
-    </div>
-  );
-};
+  nameChangeHandler = (event) => {
+    this.setState({
+      persons: [
+        { name: 'Max', age: 28 },
+        { name: event.target.value, age: 29 },
+        { name: 'Stephanie', age: 27 },
+      ],
+    });
+  };
+
+  render() {
+    // Inline Style
+    const style = {
+      backgroundColor: 'beige',
+      font: 'inherit',
+      border: '1px solid green',
+      padding: '8px',
+    };
+
+    return (
+      <div className='App'>
+        <h1>Hi, I'm a React App</h1>
+        <p>This is really working!</p>
+        <button
+          style={style}
+          onClick={this.switchNameHandler.bind(this, 'Eli')}
+        >
+          Switch Name
+        </button>
+
+        <Person
+          name={this.state.persons[0].name}
+          age={this.state.persons[0].age}
+        />
+        <Person
+          name={this.state.persons[1].name}
+          age={this.state.persons[1].age}
+          // passing methods as props
+          click={this.switchNameHandler.bind(this, 'Kali')}
+          changed={this.nameChangeHandler}
+        >
+          My Hobbies: Racing
+        </Person>
+        <Person
+          name={this.state.persons[2].name}
+          age={this.state.persons[2].age}
+        />
+      </div>
+    );
+    // return React.createElement('div', {className: 'App'}, React.createElement('h1', null, 'Does this work now?'));
+  }
+}
 
 export default App;
