@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
+// Radium is for pseudo selectors
+import Radium, { StyleRoot } from 'radium';
 import Person from './Person/Person';
 
 class App extends Component {
@@ -60,6 +62,11 @@ class App extends Component {
       font: 'inherit',
       border: '1px solid green',
       padding: '8px',
+      cursor: 'pointer',
+      ':hover': {
+        backgroundColor: 'lightgreen',
+        color: 'black',
+      },
     };
 
     let persons = null;
@@ -82,19 +89,27 @@ class App extends Component {
           })}
         </div>
       );
+
+      style.backgroundColor = 'red';
+      style[':hover'] = {
+        backgroundColor: 'lightred',
+        color: 'black',
+      };
     }
 
     return (
-      <div className='App'>
-        <h1>Hi, I'm a React App</h1>
-        <p>This is really working!</p>
-        <button style={style} onClick={this.togglePersonsHandler}>
-          Toogle Persons
-        </button>
-        {persons}
-      </div>
+      <StyleRoot>
+        <div className='App'>
+          <h1>Hi, I'm a React App</h1>
+          <p>This is really working!</p>
+          <button style={style} onClick={this.togglePersonsHandler}>
+            Toogle Persons
+          </button>
+          {persons}
+        </div>
+      </StyleRoot>
     );
   }
 }
 
-export default App;
+export default Radium(App);
