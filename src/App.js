@@ -1,21 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import styled from 'styled-components';
 import Person from './Person/Person';
-
-// Because StyledButton is a template literal, we can include a condition in the styles
-const StyledButton = styled.button`
-  background-color: ${(props) => (props.alt ? 'red' : 'green')};
-  color: white;
-  font: inherit;
-  border: 1px solid green;
-  padding: 8px;
-  cursor: pointer;
-  &:hover {
-    background-color: ${(props) => (props.alt ? 'salmon' : 'lightgreen')};
-    color: black;
-  }
-`;
 
 class App extends Component {
   state = {
@@ -114,12 +99,9 @@ class App extends Component {
       <div className='App'>
         <h1>Hi, I'm a React App</h1>
         <p>This is really working!</p>
-        <StyledButton
-          alt={this.state.showPersons}
-          onClick={this.togglePersonsHandler}
-        >
+        <button className='button' onClick={this.togglePersonsHandler}>
           Toogle Persons
-        </StyledButton>
+        </button>
         {persons}
       </div>
     );
