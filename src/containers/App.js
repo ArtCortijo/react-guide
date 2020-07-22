@@ -1,8 +1,15 @@
 import React, { Component } from 'react';
-import './App.css';
-import Person from './Person/Person';
+import classes from './App.css';
+import Persons from '../components/Persons/Persons';
+import Cockpit from '../components/Cockpit/Cockpit';
 
 class App extends Component {
+  constructor(props) {
+    // super will basically execute the constructor of the component you're extending to make sure that everything gets initialized correctly and you can do things like access this set state.
+    super(props);
+    console.log('[App.js] constructor');
+  }
+
   state = {
     persons: [
       { id: 'asda', name: 'Max', age: 28 },
@@ -12,6 +19,17 @@ class App extends Component {
     otherState: 'some other value',
     showPersons: true,
   };
+
+  // this method runs after the constructor. It's invoked right before calling the render method, both on the initial mount and on subsequent updates. It should return an object to update the state, or null to update nothing.
+  // https://reactjs.org/docs/react-component.html#static-getderivedstatefromprops
+  static getDerivedStateFromProps(props, state) {
+    console.log('[App.js] getDerivedStateFromProps', props);
+    return state;
+  }
+
+  componentDidMount() {
+    console.log('[App.js] componentDidMount');
+  }
 
   deletePersonHandler = (personIndex) => {
     // A good practice is to create a copy of your persons array before manipulating it and a simple way of doing this is by calling the slice method. Slice without arguments simply copies the full array and returns a new one
@@ -54,54 +72,27 @@ class App extends Component {
   };
 
   render() {
-    // Inline Style
-    const style = {
-      backgroundColor: 'beige',
-      font: 'inherit',
-      border: '1px solid green',
-      padding: '8px',
-      cursor: 'pointer',
-      ':hover': {
-        backgroundColor: 'lightgreen',
-        color: 'black',
-      },
-    };
-
+    console.log('[App.js] render');
     let persons = null;
 
     if (this.state.showPersons) {
       persons = (
-        <div>
-          {/* Outputting lists */}
-          {/* Map simply maps every element in a given array such as our persons array here into something else */}
-          {this.state.persons.map((person, index) => {
-            return (
-              <Person
-                click={() => this.deletePersonHandler(index)}
-                name={person.name}
-                age={person.age}
-                key={person.id}
-                changed={(event) => this.nameChangeHandler(event, person.id)}
-              />
-            );
-          })}
-        </div>
+        <Persons
+          persons={this.state.persons}
+          clicked={this.deletePersonHandler}
+          changed={this.nameChangeHandler}
+        />
       );
-
-      // style.backgroundColor = 'red';
-      // style[':hover'] = {
-      //   backgroundColor: 'lightred',
-      //   color: 'black',
-      // };
     }
 
     return (
-      <div className='App'>
-        <h1>Hi, I'm a React App</h1>
-        <p>This is really working!</p>
-        <button className='button' onClick={this.togglePersonsHandler}>
-          Toogle Persons
-        </button>
+      <div className={classes.App}>
+        <Cockpit
+          title={this.props.appTitle}
+          showPersons={this.state.showPersons}
+          persons={this.state.persons}
+          clicked={this.togglePersonsHandler}
+        />
         {persons}
       </div>
     );
